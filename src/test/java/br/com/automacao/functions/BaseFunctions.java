@@ -2,11 +2,12 @@ package br.com.automacao.functions;
 
 import br.com.automacao.config.ConfigManager;
 import br.com.automacao.driver.DriverFactory;
-import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import java.util.List;
 
 import java.time.Duration;
 
@@ -27,36 +28,65 @@ public class BaseFunctions {
         driver.get(url);
     }
 
-    public WebElement aguardarElementoVisivel(By locator) {
+    public WebElement aguardarElementoVisivel(WebElement elemento) {
         return wait.until(
-                ExpectedConditions.visibilityOfElementLocated(locator)
+                ExpectedConditions.visibilityOf(elemento)
         );
     }
 
-    public WebElement aguardarElementoClicavel(By locator) {
+    public WebElement aguardarElementoClicavel(WebElement elemento) {
         return wait.until(
-                ExpectedConditions.elementToBeClickable(locator)
+                ExpectedConditions.elementToBeClickable(elemento)
         );
     }
 
-    public void preencher(By locator, String valor) {
-        WebElement elemento = aguardarElementoVisivel(locator);
-        elemento.clear();
-        elemento.sendKeys(valor);
+    public void preencher(WebElement elemento, String valor) {
+        WebElement elementoVisivel = aguardarElementoVisivel(elemento);
+        elementoVisivel.clear();
+        elementoVisivel.sendKeys(valor);
     }
 
-    public void clicar(By locator) {
-        aguardarElementoClicavel(locator).click();
+    public void clicar(WebElement elemento) {
+        aguardarElementoClicavel(elemento).click();
     }
 
-    public String obterTexto(By locator) {
-        return aguardarElementoVisivel(locator).getText();
+    public String obterTexto(WebElement elemento) {
+        return aguardarElementoVisivel(elemento).getText();
     }
 
-    public boolean estaVisivel(By locator) {
+    public String obterValor(WebElement elemento) {
+        return aguardarElementoVisivel(elemento)
+                .getAttribute("value");
+    }
+
+    public boolean estaVisivel(WebElement elemento) {
         try {
-            return aguardarElementoVisivel(locator).isDisplayed();
-        } catch (RuntimeException exception) {
+            return aguardarElementoVisivel(elemento).isDisplayed();
+        } catch (TimeoutException exception) {
+            return false;
+        }
+    }
+
+    public void aguardarUrlConter(String trechoEsperado) {
+        wait.until(
+                ExpectedConditions.urlContains(trechoEsperado)
+        );
+    }
+
+    public List<WebElement> aguardarElementosVisiveis(
+            List<WebElement> elementos
+    ) {
+        return wait.until(
+                ExpectedConditions.visibilityOfAllElements(elementos)
+        );
+    }
+
+    public boolean existemElementosVisiveis(
+            List<WebElement> elementos
+    ) {
+        try {
+            return !aguardarElementosVisiveis(elementos).isEmpty();
+        } catch (TimeoutException exception) {
             return false;
         }
     }
