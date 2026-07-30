@@ -1,4 +1,4 @@
-package br.com.automacao.pages;
+package br.com.automacao.functions;
 
 import br.com.automacao.config.ConfigManager;
 import br.com.automacao.driver.DriverFactory;
@@ -10,12 +10,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public abstract class BasePage {
+public class BaseFunctions {
 
     protected final WebDriver driver;
     protected final WebDriverWait wait;
 
-    protected BasePage() {
+    public BaseFunctions() {
         this.driver = DriverFactory.getDriver();
         this.wait = new WebDriverWait(
                 driver,
@@ -23,37 +23,37 @@ public abstract class BasePage {
         );
     }
 
-    protected void acessar(String url) {
+    public void acessar(String url) {
         driver.get(url);
     }
 
-    protected WebElement aguardarElementoVisivel(By locator) {
+    public WebElement aguardarElementoVisivel(By locator) {
         return wait.until(
                 ExpectedConditions.visibilityOfElementLocated(locator)
         );
     }
 
-    protected WebElement aguardarElementoClicavel(By locator) {
+    public WebElement aguardarElementoClicavel(By locator) {
         return wait.until(
                 ExpectedConditions.elementToBeClickable(locator)
         );
     }
 
-    protected void preencher(By locator, String valor) {
+    public void preencher(By locator, String valor) {
         WebElement elemento = aguardarElementoVisivel(locator);
         elemento.clear();
         elemento.sendKeys(valor);
     }
 
-    protected void clicar(By locator) {
+    public void clicar(By locator) {
         aguardarElementoClicavel(locator).click();
     }
 
-    protected String obterTexto(By locator) {
+    public String obterTexto(By locator) {
         return aguardarElementoVisivel(locator).getText();
     }
 
-    protected boolean estaVisivel(By locator) {
+    public boolean estaVisivel(By locator) {
         try {
             return aguardarElementoVisivel(locator).isDisplayed();
         } catch (RuntimeException exception) {
@@ -61,11 +61,11 @@ public abstract class BasePage {
         }
     }
 
-    protected String obterTitulo() {
+    public String obterTitulo() {
         return driver.getTitle();
     }
 
-    protected String obterUrlAtual() {
+    public String obterUrlAtual() {
         return driver.getCurrentUrl();
     }
 }

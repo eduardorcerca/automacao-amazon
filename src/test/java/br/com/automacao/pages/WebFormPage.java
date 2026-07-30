@@ -1,38 +1,27 @@
 package br.com.automacao.pages;
 
-import br.com.automacao.config.ConfigManager;
 import org.openqa.selenium.By;
 
-public class WebFormPage extends BasePage {
+public class WebFormPage {
 
     private final By campoTexto = By.name("my-text");
     private final By areaTexto = By.name("my-textarea");
     private final By botaoEnviar = By.cssSelector("button[type='submit']");
     private final By mensagemResultado = By.id("message");
 
-    public void acessarPagina() {
-        acessar(ConfigManager.getBaseUrl());
+    public By getCampoTexto() {
+        return campoTexto;
     }
 
-    public void preencherCampoTexto(String texto) {
-        preencher(campoTexto, texto);
+    public By getAreaTexto() {
+        return areaTexto;
     }
 
-    public void preencherAreaTexto(String texto) {
-        preencher(areaTexto, texto);
+    public By getBotaoEnviar() {
+        return botaoEnviar;
     }
 
-    public void enviarFormulario() {
-        clicar(botaoEnviar);
-    }
-
-    public String obterMensagemResultado() {
-        return obterTexto(mensagemResultado);
-    }
-
-    public boolean formularioEstaVisivel() {
-        return estaVisivel(campoTexto)
-                && estaVisivel(areaTexto)
-                && estaVisivel(botaoEnviar);
+    public By getMensagemResultado() {
+        return mensagemResultado;
     }
 }
