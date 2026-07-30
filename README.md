@@ -1,6 +1,6 @@
-# Selenium Cucumber Template
+# Automação Mercado Livre
 
-Template de automação web desenvolvido com Java, Selenium WebDriver, Cucumber, Gherkin, JUnit 5 e Page Object Model.
+Projeto de automação web do Mercado Livre desenvolvido com Java, Selenium WebDriver, Cucumber, Gherkin, JUnit 5 e Page Object Model.
 
 ## Tecnologias
 

@@ -6,8 +6,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>br.com.automacao</groupId>
-    <artifactId>selenium-cucumber-template</artifactId>
+    <artifactId>automacao-mercadolivre</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>Automação Mercado Livre</name>
+    <description>Projeto de automação web do Mercado Livre com Selenium, Cucumber e Page Object.</description>
 
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
