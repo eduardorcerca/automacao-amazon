@@ -3,6 +3,8 @@ package br.com.automacao.functions;
 import br.com.automacao.config.ConfigManager;
 import br.com.automacao.pages.AmazonHomePage;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class AmazonFunctions extends BaseFunctions {
 
     private final AmazonHomePage amazonHomePage;
@@ -13,46 +15,34 @@ public class AmazonFunctions extends BaseFunctions {
 
     public void acessarPaginaInicial() {
         acessar(ConfigManager.getBaseUrl());
-    }
 
-    public boolean paginaInicialEstaVisivel() {
-        return estaVisivel(
-                amazonHomePage.getCampoPesquisa()
-        );
+        assertThat(estaVisivel(amazonHomePage.getCampoPesquisa()))
+                .as("O campo de pesquisa da Amazon deveria estar visível.")
+                .isTrue();
     }
 
     public void pesquisarProduto(String produto) {
-        preencher(
-                amazonHomePage.getCampoPesquisa(),
-                produto
-        );
-
-        clicar(
-                amazonHomePage.getBotaoPesquisar()
-        );
-    }
-
-    public void aguardarCarregamentoDosResultados() {
+        preencher(amazonHomePage.getCampoPesquisa(), produto);
+        clicar(amazonHomePage.getBotaoPesquisar());
         aguardarUrlConter("/s?");
-
-        aguardarElementoVisivel(
-                amazonHomePage.getTermoPesquisado()
-        );
+        aguardarElementoVisivel(amazonHomePage.getTermoPesquisado());
     }
 
-    public String obterTermoPesquisado() {
-        return obterTexto(
-                amazonHomePage.getTermoPesquisado()
-        );
-    }
+    public void validarResultadosDaPesquisa(String produto) {
+        String termoPesquisado = obterTexto(amazonHomePage.getTermoPesquisado());
+        String urlResultado = obterUrlAtual();
+        boolean existemProdutos = existemElementosVisiveis(amazonHomePage.getProdutosEncontrados());
 
-    public boolean existemProdutosNosResultados() {
-        return existemElementosVisiveis(
-                amazonHomePage.getProdutosEncontrados()
-        );
-    }
+        assertThat(termoPesquisado)
+                .as("O termo pesquisado deveria aparecer nos resultados.")
+                .containsIgnoringCase(produto);
 
-    public String obterUrlDosResultados() {
-        return obterUrlAtual();
+        assertThat(urlResultado)
+                .as("A navegação deveria estar na página de resultados da Amazon.")
+                .contains("/s?");
+
+        assertThat(existemProdutos)
+                .as("A pesquisa deveria apresentar pelo menos um produto.")
+                .isTrue();
     }
 }
